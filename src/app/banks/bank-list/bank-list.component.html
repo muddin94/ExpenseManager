@@ -1,4 +1,4 @@
-<mat-accordion multi="true">
+<mat-accordion multi="true" *ngIf="banks.length > 0">
   <mat-expansion-panel *ngFor="let bank of banks">
     <mat-expansion-panel-header>
       {{bank.name}}
@@ -6,3 +6,4 @@
     <p>{{bank.content}}</p>
   </mat-expansion-panel>
 </mat-accordion>
+<p class="info-text mat-body-1" *ngIf= "banks.length <= 0">No banks added yet!</p>

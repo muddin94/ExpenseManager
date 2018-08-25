@@ -7,8 +7,8 @@ import { Component } from '@angular/core';
 })
 export class BankListComponent{
   banks = [
-    {name: 'Capital One', content: 'What\'s in your wallet?'},
-    {name: 'Wells Fargo', content: 'Together we\'ll go far!'},
-    {name: 'Chase', content: 'The right relationship is everything.'}
+    // {name: 'Capital One', content: 'What\'s in your wallet?'},
+    // {name: 'Wells Fargo', content: 'Together we\'ll go far!'},
+    // {name: 'Chase', content: 'The right relationship is everything.'}
   ];
 }
