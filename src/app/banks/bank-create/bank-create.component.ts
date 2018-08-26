@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, EventEmitter, Output } from "@angular/core";
 
 @Component({
   selector: 'app-bank-create',
@@ -6,11 +6,19 @@ import { Component } from "@angular/core";
   styleUrls: ['./bank-create-component.css']
 })
 export class BankCreateComponent{
+
+  enteredName = '';
   enteredValue ='';
-  newBank ='NO CONTENT';
+
+  @Output() bankCreated = new EventEmitter();
+
 
   onAddBank(){
+    const bank = {
+      name: this.enteredName,
+      value: this.enteredValue
+    };
 
-    this.newBank = this.enteredValue;
+    this.bankCreated.emit(bank);
   }
 }

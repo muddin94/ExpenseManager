@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-bank-list',
@@ -6,9 +6,13 @@ import { Component } from '@angular/core';
   styleUrls: ['./bank-list.component.css']
 })
 export class BankListComponent{
-  banks = [
-    // {name: 'Capital One', content: 'What\'s in your wallet?'},
-    // {name: 'Wells Fargo', content: 'Together we\'ll go far!'},
-    // {name: 'Chase', content: 'The right relationship is everything.'}
-  ];
+
+  // banks = [
+  //   {name: 'Capital One', content: 'What\'s in your wallet?'},
+  //   {name: 'Wells Fargo', content: 'Together we\'ll go far!'},
+  //   {name: 'Chase', content: 'The right relationship is everything.'}
+  // ];
+
+  @Input() banks = [];
+
 }

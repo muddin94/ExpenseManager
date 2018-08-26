@@ -1,7 +1,7 @@
 <app-header></app-header>
 <main>
-  <app-bank-create></app-bank-create>
-  <app-bank-list></app-bank-list>
+  <app-bank-create (bankCreated)="onBankAdded($event)"></app-bank-create>
+  <app-bank-list [banks]="storedBanks"></app-bank-list>
 </main>
 
 
