@@ -1,6 +1,6 @@
+import { BanksService } from './../banks.service';
 import { Component, EventEmitter, Output } from "@angular/core";
 
-import { Bank } from '../bank.model';
 import { NgForm } from "@angular/forms";
 
 @Component({
@@ -13,8 +13,9 @@ export class BankCreateComponent{
   enteredName = '';
   enteredValue ='';
 
-  @Output() bankCreated = new EventEmitter<Bank>();
+  constructor(public banksService: BanksService){
 
+  }
 
   onAddBank(form: NgForm){
 
@@ -22,11 +23,7 @@ export class BankCreateComponent{
       return;
     }
 
-    const bank: Bank = {
-      name: form.value.name,
-      value: form.value.value
-    };
+    this.banksService.addBank(form.value.name, form.value.value);
 
-    this.bankCreated.emit(bank);
   }
 }
