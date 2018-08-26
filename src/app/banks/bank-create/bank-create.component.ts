@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output } from "@angular/core";
 
 import { Bank } from '../bank.model';
+import { NgForm } from "@angular/forms";
 
 @Component({
   selector: 'app-bank-create',
@@ -15,10 +16,15 @@ export class BankCreateComponent{
   @Output() bankCreated = new EventEmitter<Bank>();
 
 
-  onAddBank(){
+  onAddBank(form: NgForm){
+
+    if(form.invalid){
+      return;
+    }
+
     const bank: Bank = {
-      name: this.enteredName,
-      value: this.enteredValue
+      name: form.value.name,
+      value: form.value.value
     };
 
     this.bankCreated.emit(bank);
