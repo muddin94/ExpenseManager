@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 
+import { Bank } from './banks/bank.model';
 
 @Component({
   selector: 'app-root',
@@ -7,7 +8,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  storedBanks = [];
+  storedBanks: Bank[] = [];
 
   onBankAdded(bank){
     this.storedBanks.push(bank);

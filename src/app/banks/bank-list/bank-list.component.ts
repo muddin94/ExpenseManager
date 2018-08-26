@@ -1,5 +1,7 @@
 import { Component, Input } from '@angular/core';
 
+import { Bank } from '../bank.model';
+
 @Component({
   selector: 'app-bank-list',
   templateUrl: './bank-list.component.html',
@@ -13,6 +15,6 @@ export class BankListComponent{
   //   {name: 'Chase', content: 'The right relationship is everything.'}
   // ];
 
-  @Input() banks = [];
+  @Input() banks: Bank[] = [];
 
 }
