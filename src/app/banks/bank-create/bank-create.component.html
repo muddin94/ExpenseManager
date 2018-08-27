@@ -8,7 +8,8 @@
             ngModel
             required
             minlength="3"
-            #name="ngModel">
+            #name="ngModel"
+            placeholder="Bank Name">
             <mat-error *ngIf="name.invalid">Please enter a bank name.</mat-error>
         </mat-form-field>
         <mat-form-field>
@@ -18,7 +19,8 @@
             name="value"
             ngModel
             required
-            #value="ngModel"></textarea>
+            #value="ngModel"
+            placeholder="Bank Value"></textarea>
             <mat-error *ngIf="value.invalid">Please enter a bank value.</mat-error>
         </mat-form-field>
         <button

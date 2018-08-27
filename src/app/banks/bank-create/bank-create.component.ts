@@ -24,6 +24,6 @@ export class BankCreateComponent{
     }
 
     this.banksService.addBank(form.value.name, form.value.value);
-
+    form.resetForm();
   }
 }
