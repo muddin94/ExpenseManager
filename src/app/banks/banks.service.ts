@@ -34,10 +34,10 @@ export class BanksService {
 
   addBank(name: String, value: String) {
     const bank: Bank = {id: null, name: name, value: value};
-    this.http.post<{message: string}>('http://localhost:3000/api/banks', bank)
+    this.http.post<{message: string, bankId: string}>('http://localhost:3000/api/banks', bank)
       .subscribe((responseData) => {
-        console.log(responseData.message);
-
+        const id = responseData.bankId;
+        bank.id = id;
         this.banks.push(bank);
         this.banksUpdated.next([...this.banks]);
 

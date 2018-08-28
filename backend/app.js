@@ -34,11 +34,14 @@ app.post('/api/banks', (req, res, next) =>{
     name: req.body.name,
     value: req.body.value
   });
-  console.log(bank);
-  bank.save();
-  res.status(201).json({
-    message: 'Bank added successfully.'
-  });
+
+  bank.save()
+    .then(createdBank => {
+      res.status(201).json({
+        message: 'Bank added successfully.',
+        bankId: createdBank._id
+      });
+    });
 });
 
 app.get('/api/banks',(req, res, next) =>{
