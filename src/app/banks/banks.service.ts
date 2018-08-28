@@ -24,8 +24,15 @@ export class BanksService {
 
   addBank(name: String, value: String) {
     const bank: Bank = {id: null, name: name, value: value};
-    this.banks.push(bank);
-    this.banksUpdated.next([...this.banks]);
+    this.http.post<{message: string}>('http://localhost:3000/api/banks', bank)
+      .subscribe((responseData) => {
+        console.log(responseData.message);
+
+        this.banks.push(bank);
+        this.banksUpdated.next([...this.banks]);
+
+      });
+
   }
 
 }
