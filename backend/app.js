@@ -5,7 +5,7 @@ const Bank = require('./models/bank');
 
 const app = express();
 
-mongoose.connect('mongodb+srv://root:N3gr8F18PBadnkC7@cluster0-mo2we.mongodb.net/test?retryWrites=true')
+mongoose.connect('mongodb+srv://root:N3gr8F18PBadnkC7@cluster0-mo2we.mongodb.net/expenseManager?retryWrites=true')
   .then(() => {
     console.log('Connected to database');
   })
@@ -36,29 +36,21 @@ app.post('/api/banks', (req, res, next) =>{
     value: req.body.value
   });
   console.log(bank);
+  bank.save();
   res.status(201).json({
     message: 'Bank added successfully.'
   });
 });
 
 app.get('/api/banks',(req, res, next) =>{
-  const banks = [
-    {
-      id: 'abc123',
-      name: 'First Server-Side Bank',
-      value: 'This is coming from the nodejs server.'
-    },
-    {
-      id: 'def456',
-      name: 'Second Server-Side Bank',
-      value: 'This is coming from the nodejs server again.'
-    }
-  ]
 
-  res.status(200).json({
-    message: 'Banks fetched successfully',
-    banks: banks
-  });
+  Bank.find()
+    .then(documents => {
+      res.status(200).json({
+        message: 'Banks fetched successfully',
+        banks: documents
+      });
+    });
 
 });
 
