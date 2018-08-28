@@ -9,7 +9,7 @@ import { BanksService } from '../banks.service';
   templateUrl: './bank-list.component.html',
   styleUrls: ['./bank-list.component.css']
 })
-export class BankListComponent implements OnInit, OnDestroy{
+export class BankListComponent implements OnInit, OnDestroy {
 
   // banks = [
   //   {name: 'Capital One', content: 'What\'s in your wallet?'},
@@ -20,19 +20,19 @@ export class BankListComponent implements OnInit, OnDestroy{
   banks: Bank[] = [];
   private banksSubscription: Subscription;
 
-  constructor(public banksService: BanksService){
+  constructor(public banksService: BanksService) {
 
   }
 
-  ngOnInit(){
-    this.banks = this.banksService.getBanks();
-    this.banksSubscription = this.banksService.getPostUpdateListener()
+  ngOnInit() {
+    this.banksService.getBanks();
+    this.banksSubscription = this.banksService.getBankUpdateListener()
       .subscribe((banks) => {
         this.banks = banks;
       });
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.banksSubscription.unsubscribe();
   }
 

@@ -1,19 +1,18 @@
 import { BanksService } from './../banks.service';
-import { Component, EventEmitter, Output } from "@angular/core";
-
-import { NgForm } from "@angular/forms";
+import { Component, EventEmitter, Output } from '@angular/core';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-bank-create',
   templateUrl: './bank-create.component.html',
   styleUrls: ['./bank-create-component.css']
 })
-export class BankCreateComponent{
+export class BankCreateComponent {
 
   enteredName = '';
-  enteredValue ='';
+  enteredValue = '';
 
-  constructor(public banksService: BanksService){
+  constructor(public banksService: BanksService) {
 
   }
 
