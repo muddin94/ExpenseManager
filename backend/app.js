@@ -20,25 +20,29 @@ app.use((req, res, next) =>{
 });
 
 app.post('/api/banks', (req, res, next) =>{
-  console.log();
+  const bank = req.body;
+  console.log(bank);
+  res.status(201).json({
+    message: 'Bank added successfully.'
+  });
 });
 
 app.use('/api/banks',(req, res, next) =>{
   const banks = [
     {
       id: 'abc123',
-      name: 'First Server-Side Post',
+      name: 'First Server-Side Bank',
       value: 'This is coming from the nodejs server.'
     },
     {
       id: 'def456',
-      name: 'Second Server-Side Post',
+      name: 'Second Server-Side Bank',
       value: 'This is coming from the nodejs server again.'
     }
   ]
 
   res.status(200).json({
-    message: 'Banks successfully',
+    message: 'Banks fetched successfully',
     banks: banks
   });
 
