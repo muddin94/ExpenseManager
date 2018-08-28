@@ -16,6 +16,7 @@ import { AppComponent } from './app.component';
 import { BankCreateComponent } from './banks/bank-create/bank-create.component';
 import { HeaderComponent } from './header/header.component';
 import { BankListComponent } from './banks/bank-list/bank-list.component';
+import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { BankListComponent } from './banks/bank-list/bank-list.component';
   ],
   imports: [
     BrowserModule,
+    AppRoutingModule,
     FormsModule,
     BrowserAnimationsModule,
     MatInputModule,
