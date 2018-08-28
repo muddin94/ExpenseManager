@@ -24,6 +24,11 @@ export class BankListComponent implements OnInit, OnDestroy {
 
   }
 
+
+  onDelete(bankId: string) {
+    this.banksService.deleteBank(bankId);
+  }
+
   ngOnInit() {
     this.banksService.getBanks();
     this.banksSubscription = this.banksService.getBankUpdateListener()

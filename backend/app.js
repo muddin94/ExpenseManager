@@ -22,7 +22,6 @@ app.use((req, res, next) =>{
     'Access-Control-Allow-Headers',
     'Origin, X-Requested-With, Content-Type, Accept'
   );
-
   res.setHeader(
     'Access-Control-Allow-Methods',
     'GET, POST, PATCH, DELETE, OPTIONS'
@@ -47,10 +46,21 @@ app.get('/api/banks',(req, res, next) =>{
   Bank.find()
     .then(documents => {
       res.status(200).json({
-        message: 'Banks fetched successfully',
+        message: 'Banks fetched successfully.',
         banks: documents
       });
     });
+
+});
+
+app.delete('/api/banks/:id',(req, res, next) =>{
+  Bank.deleteOne({_id:req.params.id})
+    .then((result) => {
+      console.log(result);
+      res.status(200).json({
+        message: 'Bank deleted.'
+      });
+  });
 
 });
 

@@ -45,4 +45,13 @@ export class BanksService {
 
   }
 
+  deleteBank(bankId: String) {
+    this.http.delete('http://localhost:3000/api/banks/' + bankId)
+    .subscribe(() => {
+      const updatedBanks = this.banks.filter(bank => bank.id !== bankId);
+      this.banks = updatedBanks;
+      this.banksUpdated.next([...this.banks]);
+    });
+  }
+
 }
