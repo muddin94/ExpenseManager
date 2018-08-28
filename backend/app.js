@@ -27,7 +27,7 @@ app.post('/api/banks', (req, res, next) =>{
   });
 });
 
-app.use('/api/banks',(req, res, next) =>{
+app.get('/api/banks',(req, res, next) =>{
   const banks = [
     {
       id: 'abc123',
