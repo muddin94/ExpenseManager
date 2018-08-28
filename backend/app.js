@@ -24,7 +24,7 @@ app.use((req, res, next) =>{
   );
   res.setHeader(
     'Access-Control-Allow-Methods',
-    'GET, POST, PATCH, DELETE, OPTIONS'
+    'GET, POST, PATCH, PUT, DELETE, OPTIONS'
   );
   next();
 });
@@ -66,5 +66,27 @@ app.delete('/api/banks/:id',(req, res, next) =>{
   });
 
 });
+
+app.put('/api/banks/:id', (req, res, next) => {
+  const bank = new Bank({
+    _id: req.body.id,
+    name: req.body.name,
+    value: req.body.value
+  });
+  Bank.updateOne( { _id: req.params.id}, bank)
+    .then(result => {
+      res.status(200).json({message: 'Update successful.'});
+    });
+});
+
+app.get('/api/banks/:id', (req, res, next) => {
+  Bank.findById(req.params.id).then(bank => {
+    if(bank){
+      res.status(200).json(bank);
+    }else{
+      res.status(404).json({message: 'Bank not found.'});
+    }
+  })
+})
 
 module.exports = app;

@@ -5,7 +5,9 @@ import { BankCreateComponent } from './banks/bank-create/bank-create.component';
 
 const routes: Routes = [
   { path: '', component: BankListComponent },
-  { path: 'create', component: BankCreateComponent}
+  { path: 'create', component: BankCreateComponent},
+  { path: 'edit/:bankId', component: BankCreateComponent}
+
 ];
 
 @NgModule({

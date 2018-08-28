@@ -32,6 +32,10 @@ export class BanksService {
     return this.banksUpdated.asObservable();
   }
 
+  getBank(id: string) {
+    return this.http.get<{_id:string, name: string, value: string}>('http://localhost:3000/api/banks/' + id);
+  }
+
   addBank(name: String, value: String) {
     const bank: Bank = {id: null, name: name, value: value};
     this.http.post<{message: string, bankId: string}>('http://localhost:3000/api/banks', bank)
@@ -52,6 +56,19 @@ export class BanksService {
       this.banks = updatedBanks;
       this.banksUpdated.next([...this.banks]);
     });
+  }
+
+  updateBank(id: string, name: string, value: string) {
+
+    const bank: Bank = { id: id, name: name, value: value};
+    this.http.put('http://localhost:3000/api/banks/' + id, bank)
+      .subscribe(response => {
+        const updatedBanks = [...this.banks];
+        const oldBankIndex = updatedBanks.findIndex(b => b.id === bank.id);
+        updatedBanks[oldBankIndex] = bank;
+        this.banks = updatedBanks;
+        this.banksUpdated.next([...this.banks]);
+      });
   }
 
 }

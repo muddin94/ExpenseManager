@@ -1,11 +1,11 @@
 <mat-card>
-  <form (submit)="onAddBank(bankForm)" #bankForm="ngForm">
+  <form (submit)="onSaveBank(bankForm)" #bankForm="ngForm">
       <mat-form-field>
           <input
             matInput
             type="text"
             name="name"
-            ngModel
+            [ngModel] = "bank?.name"
             required
             minlength="3"
             #name="ngModel"
@@ -17,7 +17,7 @@
             matInput
             rows="6"
             name="value"
-            ngModel
+            [ngModel] = "bank?.value"
             required
             #value="ngModel"
             placeholder="Bank Value"></textarea>
