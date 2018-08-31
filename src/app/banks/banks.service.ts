@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Bank } from './bank.model';
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
@@ -9,7 +10,7 @@ export class BanksService {
   private banks: Bank[] = [];
   private banksUpdated = new Subject<Bank[]>();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router:Router) {}
 
   getBanks() {
     this.http.get<{message: string, banks: any }>('http://localhost:3000/api/banks')
@@ -44,7 +45,7 @@ export class BanksService {
         bank.id = id;
         this.banks.push(bank);
         this.banksUpdated.next([...this.banks]);
-
+        this.router.navigate(["/"]);
       });
 
   }
@@ -68,6 +69,7 @@ export class BanksService {
         updatedBanks[oldBankIndex] = bank;
         this.banks = updatedBanks;
         this.banksUpdated.next([...this.banks]);
+        this.router.navigate(["/"]);
       });
   }
 

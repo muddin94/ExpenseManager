@@ -16,6 +16,7 @@ export class BankCreateComponent implements OnInit {
   private mode = 'create';
   private bankId: string;
   bank: Bank;
+  isLoading = false;
 
   constructor(public banksService: BanksService, public route: ActivatedRoute) {
 
@@ -26,7 +27,7 @@ export class BankCreateComponent implements OnInit {
     if (form.invalid) {
       return;
     }
-
+    this.isLoading = true;
     if(this.mode === 'create'){
       this.banksService.addBank(form.value.name, form.value.value);
     } else {
@@ -41,7 +42,9 @@ export class BankCreateComponent implements OnInit {
       if (paramMap.has('bankId')) {
         this.mode = 'edit';
         this.bankId = paramMap.get('bankId');
+        this.isLoading = true;
         this.banksService.getBank(this.bankId).subscribe(bankData => {
+          this.isLoading = false;
           this.bank = { id: bankData._id, name: bankData.name, value: bankData.value};
         });
       } else {

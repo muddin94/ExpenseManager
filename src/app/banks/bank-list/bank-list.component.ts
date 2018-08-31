@@ -18,6 +18,7 @@ export class BankListComponent implements OnInit, OnDestroy {
   // ];
 
   banks: Bank[] = [];
+  isLoading = false;
   private banksSubscription: Subscription;
 
   constructor(public banksService: BanksService) {
@@ -31,8 +32,10 @@ export class BankListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.banksService.getBanks();
+    this.isLoading = true;
     this.banksSubscription = this.banksService.getBankUpdateListener()
       .subscribe((banks) => {
+        this.isLoading = false;
         this.banks = banks;
       });
   }
