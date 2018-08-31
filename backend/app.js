@@ -1,7 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const Bank = require('./models/bank');
+
+const postsRoutes = require("./routes/posts");
 
 const app = express();
 
@@ -29,64 +30,6 @@ app.use((req, res, next) =>{
   next();
 });
 
-app.post('/api/banks', (req, res, next) =>{
-  const bank = new Bank({
-    name: req.body.name,
-    value: req.body.value
-  });
-
-  bank.save()
-    .then(createdBank => {
-      res.status(201).json({
-        message: 'Bank added successfully.',
-        bankId: createdBank._id
-      });
-    });
-});
-
-app.get('/api/banks',(req, res, next) =>{
-
-  Bank.find()
-    .then(documents => {
-      res.status(200).json({
-        message: 'Banks fetched successfully.',
-        banks: documents
-      });
-    });
-
-});
-
-app.delete('/api/banks/:id',(req, res, next) =>{
-  Bank.deleteOne({_id:req.params.id})
-    .then((result) => {
-      console.log(result);
-      res.status(200).json({
-        message: 'Bank deleted.'
-      });
-  });
-
-});
-
-app.put('/api/banks/:id', (req, res, next) => {
-  const bank = new Bank({
-    _id: req.body.id,
-    name: req.body.name,
-    value: req.body.value
-  });
-  Bank.updateOne( { _id: req.params.id}, bank)
-    .then(result => {
-      res.status(200).json({message: 'Update successful.'});
-    });
-});
-
-app.get('/api/banks/:id', (req, res, next) => {
-  Bank.findById(req.params.id).then(bank => {
-    if(bank){
-      res.status(200).json(bank);
-    }else{
-      res.status(404).json({message: 'Bank not found.'});
-    }
-  })
-})
+app.use('/api/banks', postsRoutes);
 
 module.exports = app;
