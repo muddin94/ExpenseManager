@@ -1,28 +1,28 @@
 <mat-card>
   <mat-spinner *ngIf="isLoading"></mat-spinner>
-  <form (submit)="onSaveBank(bankForm)" #bankForm="ngForm" *ngIf="!isLoading">
+  <form [formGroup]="form" (submit)="onSaveBank()" *ngIf="!isLoading">
       <mat-form-field>
           <input
             matInput
             type="text"
-            name="name"
-            [ngModel] = "bank?.name"
-            required
-            minlength="3"
-            #name="ngModel"
+            formControlName="name"
             placeholder="Bank Name">
-            <mat-error *ngIf="name.invalid">Please enter a bank name.</mat-error>
+            <mat-error *ngIf="form.get('name').invalid">Please enter a bank name.</mat-error>
         </mat-form-field>
+        <div>
+          <button mat-stroked-button type="button" (click)="fileBrowser.click()">Upload Image</button>
+          <input type="file" #fileBrowser (change)="onFileSelected($event)">
+        </div>
+        <div class="image-preview" *ngIf="imagePreview !== '' && imagePreview && form.get('image').valid">
+          <img [src]="imagePreview" [alt]="form.value.name">
+        </div>
         <mat-form-field>
           <textarea
             matInput
             rows="6"
-            name="value"
-            [ngModel] = "bank?.value"
-            required
-            #value="ngModel"
+            formControlName="value"
             placeholder="Bank Value"></textarea>
-            <mat-error *ngIf="value.invalid">Please enter a bank value.</mat-error>
+            <mat-error *ngIf="form.get('value').invalid">Please enter a bank value.</mat-error>
         </mat-form-field>
         <button
           mat-raised-button
