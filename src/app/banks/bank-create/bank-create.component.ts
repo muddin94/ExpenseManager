@@ -48,9 +48,18 @@ export class BankCreateComponent implements OnInit {
     }
     this.isLoading = true;
     if(this.mode === 'create'){
-      this.banksService.addBank(this.form.value.name, this.form.value.value);
+      this.banksService.addBank(
+        this.form.value.name,
+        this.form.value.value,
+        this.form.value.image
+      );
     } else {
-      this.banksService.updateBank(this.bankId, this.form.value.name, this.form.value.value);
+      this.banksService.updateBank(
+        this.bankId,
+        this.form.value.name,
+        this.form.value.value,
+        this.form.value.image
+      );
     }
 
     this.form.reset();
@@ -78,10 +87,16 @@ export class BankCreateComponent implements OnInit {
         this.isLoading = true;
         this.banksService.getBank(this.bankId).subscribe(bankData => {
           this.isLoading = false;
-          this.bank = { id: bankData._id, name: bankData.name, value: bankData.value};
+          this.bank = {
+            id: bankData._id,
+            name: bankData.name,
+            value: bankData.value,
+            imagePath: bankData.imagePath
+          };
           this.form.setValue({
             'name': this.bank.name,
-            'value': this.bank.value
+            'value': this.bank.value,
+            'image': this.bank.imagePath
           });
         });
 

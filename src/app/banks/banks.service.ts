@@ -19,7 +19,8 @@ export class BanksService {
           return {
             name: bank.name,
             value: bank.value,
-            id: bank._id
+            id: bank._id,
+            imagePath: bank.imagePath
           };
         });
       }))
@@ -34,23 +35,38 @@ export class BanksService {
   }
 
   getBank(id: string) {
-    return this.http.get<{_id:string, name: string, value: string}>('http://localhost:3000/api/banks/' + id);
+    return this.http.get<{_id:string, name: string, value: string, imagePath: string}>(
+      'http://localhost:3000/api/banks/' + id
+    );
   }
 
-  addBank(name: String, value: String) {
-    const bank: Bank = {id: null, name: name, value: value};
-    this.http.post<{message: string, bankId: string}>('http://localhost:3000/api/banks', bank)
-      .subscribe((responseData) => {
-        const id = responseData.bankId;
-        bank.id = id;
+  addBank(name: string, value: string, image: File) {
+    const bankData = new FormData();
+
+    bankData.append('name', name);
+    bankData.append('value', value);
+    bankData.append('image', image, name);
+
+    this.http
+    .post<{message: string; bank: Bank}>(
+      'http://localhost:3000/api/banks',
+      bankData
+    )
+      .subscribe(responseData => {
+        const bank: Bank = {
+          id: responseData.bank.id,
+          name: name,
+          value: value,
+          imagePath: responseData.bank.imagePath
+        };
         this.banks.push(bank);
         this.banksUpdated.next([...this.banks]);
-        this.router.navigate(["/"]);
+        this.router.navigate(['/']);
       });
 
   }
 
-  deleteBank(bankId: String) {
+  deleteBank(bankId: string) {
     this.http.delete('http://localhost:3000/api/banks/' + bankId)
     .subscribe(() => {
       const updatedBanks = this.banks.filter(bank => bank.id !== bankId);
@@ -59,17 +75,37 @@ export class BanksService {
     });
   }
 
-  updateBank(id: string, name: string, value: string) {
+  updateBank(id: string, name: string, value: string, image: File | string) {
+    let bankData: Bank | FormData;
+    if(typeof(image) === 'object'){
+      bankData = new FormData();
+      bankData.append('id', id);
+      bankData.append('name', name);
+      bankData.append('value', value);
+      bankData.append('image', image, name);
+    } else {
+      bankData = {
+        id: id,
+        name: name,
+        value:value,
+        imagePath: image
+      };
+    }
 
-    const bank: Bank = { id: id, name: name, value: value};
-    this.http.put('http://localhost:3000/api/banks/' + id, bank)
+    this.http.put('http://localhost:3000/api/banks/' + id, bankData)
       .subscribe(response => {
         const updatedBanks = [...this.banks];
-        const oldBankIndex = updatedBanks.findIndex(b => b.id === bank.id);
+        const oldBankIndex = updatedBanks.findIndex(b => b.id === id);
+        const bank: Bank = {
+          id: id,
+          name: name,
+          value:value,
+          imagePath: ''
+        };
         updatedBanks[oldBankIndex] = bank;
         this.banks = updatedBanks;
         this.banksUpdated.next([...this.banks]);
-        this.router.navigate(["/"]);
+        this.router.navigate(['/']);
       });
   }
 

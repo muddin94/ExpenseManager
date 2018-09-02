@@ -4,6 +4,9 @@
     <mat-expansion-panel-header>
       {{bank.name}}
     </mat-expansion-panel-header>
+    <div class="bank-image">
+      <img [src]="bank.imagePath" [alt]="bank.name">
+    </div>
     <p>{{bank.value}}</p>
     <mat-action-row>
       <a mat-button color="primary" [routerLink]="['/edit',bank.id]">Edit</a>
