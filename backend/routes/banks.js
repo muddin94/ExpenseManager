@@ -51,12 +51,26 @@ router.post(
 );
 
 router.get('',(req, res, next) =>{
+  const pageSize = +req.query.pagesize;
+  const currentPage = +req.query.page;
+  const bankQuery = Bank.find();
+  let fetchedBanks;
+  if(pageSize && currentPage){
+    bankQuery
+      .skip(pageSize * (currentPage - 1))
+      .limit(pageSize);
+  }
 
-  Bank.find()
+  bankQuery
     .then(documents => {
+      fetchedBanks = documents;
+      return Bank.count();
+    })
+    .then(count => {
       res.status(200).json({
-        message: 'Banks fetched successfully.',
-        banks: documents
+        message: "Banks fetched successfully.",
+        banks: fetchedBanks,
+        maxBanks: count
       });
     });
 

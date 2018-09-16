@@ -8,25 +8,31 @@ import { map } from 'rxjs/operators';
 @Injectable({providedIn: 'root'})
 export class BanksService {
   private banks: Bank[] = [];
-  private banksUpdated = new Subject<Bank[]>();
+  private banksUpdated = new Subject<{banks: Bank[],bankCount: number}>();
 
   constructor(private http: HttpClient, private router:Router) {}
 
-  getBanks() {
-    this.http.get<{message: string, banks: any }>('http://localhost:3000/api/banks')
+  getBanks(banksPerPage: number, currentPage: number) {
+    const queryParams =`?pagesize=${banksPerPage}&page=${currentPage}`;
+    this.http.get<{message: string, banks: any, maxBanks: number }>('http://localhost:3000/api/banks' + queryParams)
       .pipe(map((bankData) => {
-        return bankData.banks.map(bank => {
+        return { banks: bankData.banks.map(bank => {
           return {
             name: bank.name,
             value: bank.value,
             id: bank._id,
             imagePath: bank.imagePath
           };
-        });
+        }),
+        maxBanks: bankData.maxBanks
+      };
       }))
-      .subscribe((transformedBanks) => {
-        this.banks = transformedBanks;
-        this.banksUpdated.next([...this.banks]);
+      .subscribe((transformedBankData) => {
+        this.banks = transformedBankData.banks;
+        this.banksUpdated.next({
+          banks: [...this.banks],
+          bankCount: transformedBankData.maxBanks
+        });
       });
   }
 
@@ -53,26 +59,13 @@ export class BanksService {
       bankData
     )
       .subscribe(responseData => {
-        const bank: Bank = {
-          id: responseData.bank.id,
-          name: name,
-          value: value,
-          imagePath: responseData.bank.imagePath
-        };
-        this.banks.push(bank);
-        this.banksUpdated.next([...this.banks]);
         this.router.navigate(['/']);
       });
 
   }
 
   deleteBank(bankId: string) {
-    this.http.delete('http://localhost:3000/api/banks/' + bankId)
-    .subscribe(() => {
-      const updatedBanks = this.banks.filter(bank => bank.id !== bankId);
-      this.banks = updatedBanks;
-      this.banksUpdated.next([...this.banks]);
-    });
+    return this.http.delete('http://localhost:3000/api/banks/' + bankId);
   }
 
   updateBank(id: string, name: string, value: string, image: File | string) {
@@ -94,17 +87,6 @@ export class BanksService {
 
     this.http.put('http://localhost:3000/api/banks/' + id, bankData)
       .subscribe(response => {
-        const updatedBanks = [...this.banks];
-        const oldBankIndex = updatedBanks.findIndex(b => b.id === id);
-        const bank: Bank = {
-          id: id,
-          name: name,
-          value:value,
-          imagePath: ''
-        };
-        updatedBanks[oldBankIndex] = bank;
-        this.banks = updatedBanks;
-        this.banksUpdated.next([...this.banks]);
         this.router.navigate(['/']);
       });
   }

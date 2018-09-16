@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 
 import { Bank } from '../bank.model';
 import { BanksService } from '../banks.service';
+import { PageEvent } from '@angular/material';
 
 @Component({
   selector: 'app-bank-list',
@@ -19,6 +20,11 @@ export class BankListComponent implements OnInit, OnDestroy {
 
   banks: Bank[] = [];
   isLoading = false;
+  totalBanks = 0;
+  banksPerPage = 2;
+  currentPage = 1;
+  pageSizeOptions = [1, 2, 5, 10];
+
   private banksSubscription: Subscription;
 
   constructor(public banksService: BanksService) {
@@ -27,16 +33,27 @@ export class BankListComponent implements OnInit, OnDestroy {
 
 
   onDelete(bankId: string) {
-    this.banksService.deleteBank(bankId);
+    this.isLoading = true;
+    this.banksService.deleteBank(bankId).subscribe(() => {
+      this.banksService.getBanks(this.banksPerPage, this.currentPage);
+    });
+  }
+
+  onChangedPage(pageData: PageEvent){
+    this.isLoading = true;
+    this.currentPage = pageData.pageIndex + 1;
+    this.banksPerPage = pageData.pageSize;
+    this.banksService.getBanks(this.banksPerPage, this.currentPage);
   }
 
   ngOnInit() {
-    this.banksService.getBanks();
+    this.banksService.getBanks(this.banksPerPage, this.currentPage);
     this.isLoading = true;
     this.banksSubscription = this.banksService.getBankUpdateListener()
-      .subscribe((banks) => {
+      .subscribe((bankData: { banks: Bank[], bankCount: number}) => {
         this.isLoading = false;
-        this.banks = banks;
+        this.banks = bankData.banks;
+        this.totalBanks = bankData.bankCount;
       });
   }
 
