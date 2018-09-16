@@ -5,6 +5,8 @@ const mongoose = require('mongoose');
 
 const banksRoutes = require('./routes/banks');
 
+const userRoutes = require('./routes/user');
+
 const app = express();
 
 mongoose.connect('mongodb+srv://root:N3gr8F18PBadnkC7@cluster0-mo2we.mongodb.net/expenseManager?retryWrites=true')
@@ -24,7 +26,7 @@ app.use((req, res, next) =>{
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader(
     'Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept'
+    'Origin, X-Requested-With, Content-Type, Accept, Authorization'
   );
   res.setHeader(
     'Access-Control-Allow-Methods',
@@ -34,5 +36,6 @@ app.use((req, res, next) =>{
 });
 
 app.use('/api/banks', banksRoutes);
+app.use('/api/user', userRoutes);
 
 module.exports = app;

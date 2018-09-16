@@ -1,3 +1,4 @@
+import { AuthService } from './../../auth/auth.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 
@@ -24,10 +25,13 @@ export class BankListComponent implements OnInit, OnDestroy {
   banksPerPage = 2;
   currentPage = 1;
   pageSizeOptions = [1, 2, 5, 10];
+  userIsAuthenticated = false;
 
   private banksSubscription: Subscription;
+  private authStatusSub: Subscription;
 
-  constructor(public banksService: BanksService) {
+
+  constructor(public banksService: BanksService, private authService: AuthService) {
 
   }
 
@@ -55,10 +59,18 @@ export class BankListComponent implements OnInit, OnDestroy {
         this.banks = bankData.banks;
         this.totalBanks = bankData.bankCount;
       });
+    this.userIsAuthenticated = this.authService.getIsAuth();
+    this.authStatusSub = this.authService
+      .getAuthStatusListener()
+      .subscribe( isAuthenticated =>{
+        this.userIsAuthenticated = isAuthenticated;
+      });
   }
 
   ngOnDestroy() {
     this.banksSubscription.unsubscribe();
+
+    this.authStatusSub.unsubscribe();
   }
 
 }

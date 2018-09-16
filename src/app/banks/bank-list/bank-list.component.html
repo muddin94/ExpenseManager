@@ -8,7 +8,7 @@
       <img [src]="bank.imagePath" [alt]="bank.name">
     </div>
     <p>{{bank.value}}</p>
-    <mat-action-row>
+    <mat-action-row *ngIf="userIsAuthenticated">
       <a mat-button color="primary" [routerLink]="['/edit',bank.id]">Edit</a>
       <button mat-button color="warn" (click)="onDelete(bank.id)">Delete</button>
     </mat-action-row>
