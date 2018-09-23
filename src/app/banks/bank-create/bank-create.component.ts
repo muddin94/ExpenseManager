@@ -91,7 +91,8 @@ export class BankCreateComponent implements OnInit {
             id: bankData._id,
             name: bankData.name,
             value: bankData.value,
-            imagePath: bankData.imagePath
+            imagePath: bankData.imagePath,
+            creator: bankData.creator
           };
           this.form.setValue({
             'name': this.bank.name,

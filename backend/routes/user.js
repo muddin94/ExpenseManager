@@ -13,10 +13,17 @@ router.post("/signup", (req, res, next) => {
       password: hash
     });
     user.save()
-      .then( result => {
-        res.status(201).json({
-          message: 'User successfuly created.',
-          result: result
+      .then( createdUser => {
+        const token = jwt.sign(
+          { email: createdUser.email, userId: createdUser._id},
+          'secret_this_should_be_longer',
+          { expiresIn: '1h' }
+        );
+        res.status(200).json({
+          message: 'User added successfully',
+          token: token,
+          expiresIn: 3600,
+          userId: createdUser._id
         });
       })
       .catch(err => {
@@ -52,7 +59,8 @@ router.post('/login', (req, res, next) => {
       );
       res.status(200).json({
         token: token,
-        expiresIn: 3600
+        expiresIn: 3600,
+        userId: fetchedUser._id
       });
     })
     .catch(err => {

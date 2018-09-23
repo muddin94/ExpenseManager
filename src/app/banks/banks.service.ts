@@ -21,7 +21,8 @@ export class BanksService {
             name: bank.name,
             value: bank.value,
             id: bank._id,
-            imagePath: bank.imagePath
+            imagePath: bank.imagePath,
+            creator: bank.creator
           };
         }),
         maxBanks: bankData.maxBanks
@@ -41,7 +42,7 @@ export class BanksService {
   }
 
   getBank(id: string) {
-    return this.http.get<{_id:string, name: string, value: string, imagePath: string}>(
+    return this.http.get<{_id:string, name: string, value: string, imagePath: string, creator: string}>(
       'http://localhost:3000/api/banks/' + id
     );
   }
@@ -81,7 +82,8 @@ export class BanksService {
         id: id,
         name: name,
         value:value,
-        imagePath: image
+        imagePath: image,
+        creator: null
       };
     }
 

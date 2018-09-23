@@ -13,12 +13,6 @@ import { PageEvent } from '@angular/material';
 })
 export class BankListComponent implements OnInit, OnDestroy {
 
-  // banks = [
-  //   {name: 'Capital One', content: 'What\'s in your wallet?'},
-  //   {name: 'Wells Fargo', content: 'Together we\'ll go far!'},
-  //   {name: 'Chase', content: 'The right relationship is everything.'}
-  // ];
-
   banks: Bank[] = [];
   isLoading = false;
   totalBanks = 0;
@@ -26,7 +20,7 @@ export class BankListComponent implements OnInit, OnDestroy {
   currentPage = 1;
   pageSizeOptions = [1, 2, 5, 10];
   userIsAuthenticated = false;
-
+  userId: string;
   private banksSubscription: Subscription;
   private authStatusSub: Subscription;
 
@@ -53,6 +47,7 @@ export class BankListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.banksService.getBanks(this.banksPerPage, this.currentPage);
     this.isLoading = true;
+    this.userId = this.authService.getUserId();
     this.banksSubscription = this.banksService.getBankUpdateListener()
       .subscribe((bankData: { banks: Bank[], bankCount: number}) => {
         this.isLoading = false;
@@ -64,6 +59,7 @@ export class BankListComponent implements OnInit, OnDestroy {
       .getAuthStatusListener()
       .subscribe( isAuthenticated =>{
         this.userIsAuthenticated = isAuthenticated;
+        this.userId = this.authService.getUserId();
       });
   }
 

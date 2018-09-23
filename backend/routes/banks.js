@@ -37,7 +37,8 @@ router.post(
     const bank = new Bank({
       name: req.body.name,
       value: req.body.value,
-      imagePath: url + '/images/' + req.file.filename
+      imagePath: url + '/images/' + req.file.filename,
+      creator: req.userData.userId
     });
 
     bank.save()
@@ -83,12 +84,17 @@ router.delete(
   '/:id',
   checkAuth,
   (req, res, next) =>{
-  Bank.deleteOne({_id:req.params.id})
+  Bank.deleteOne({_id:req.params.id, creator: req.userData.userId})
     .then((result) => {
-      console.log(result);
-      res.status(200).json({
-        message: 'Bank deleted.'
-      });
+      if(result.n > 0) {
+        res.status(200).json({
+          message: 'Deletion successful.'
+        });
+      } else {
+        res.status(401).json({
+          message: 'Not authorized.'
+        });
+      }
   });
 
 });
@@ -107,16 +113,20 @@ router.put(
       _id: req.body.id,
       name: req.body.name,
       value: req.body.value,
-      imagePath: imagePath
+      imagePath: imagePath,
+      creator: req.userData.userId
     });
-    console.log(bank)
-    Bank.updateOne( { _id: req.params.id}, bank)
+    Bank.updateOne( { _id: req.params.id, creator: req.userData.userId }, bank)
       .then(result => {
-        res.status(200).json(
-          {
+        if(result.nModified > 0) {
+          res.status(200).json({
             message: 'Update successful.'
-          }
-      );
+          });
+        } else {
+          res.status(401).json({
+            message: 'Not authorized.'
+          });
+        }
     });
 });
 
