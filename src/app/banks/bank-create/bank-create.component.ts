@@ -1,9 +1,12 @@
+import { OnDestroy } from '@angular/core';
+import { AuthService } from './../../auth/auth.service';
 import { mimeType } from './mime-type.validator';
 import { BanksService } from './../banks.service';
 import { Component, EventEmitter, Output, OnInit } from '@angular/core';
 import { NgForm, FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Bank } from '../bank.model';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -11,7 +14,7 @@ import { Bank } from '../bank.model';
   templateUrl: './bank-create.component.html',
   styleUrls: ['./bank-create-component.css']
 })
-export class BankCreateComponent implements OnInit {
+export class BankCreateComponent implements OnInit, OnDestroy {
 
   enteredName = '';
   enteredValue = '';
@@ -20,12 +23,15 @@ export class BankCreateComponent implements OnInit {
   bank: Bank;
   isLoading = false;
   form: FormGroup;
-  imagePreview: string
+  imagePreview: string;
+  private authStatusSub: Subscription;
 
 
-  constructor(public banksService: BanksService, public route: ActivatedRoute) {
-
-  }
+  constructor(
+    public banksService: BanksService,
+    public route: ActivatedRoute,
+    private authService: AuthService
+    ) {}
 
 
   onFileSelected(event: Event){
@@ -66,7 +72,9 @@ export class BankCreateComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    this.authService.getAuthStatusListener().subscribe( authStatus => {
+      this.isLoading = false;
+    })
     this.form = new FormGroup({
       'name': new FormControl(null, {
         validators: [Validators.required, Validators.minLength(3)]
@@ -106,5 +114,9 @@ export class BankCreateComponent implements OnInit {
         this.bankId = null;
       }
     });
+  }
+
+  ngOnDestroy() {
+    this.authStatusSub.unsubscribe();
   }
 }

@@ -41,7 +41,8 @@ router.post(
       creator: req.userData.userId
     });
 
-    bank.save()
+    bank
+      .save()
       .then(createdBank => {
         res.status(201).json({
           message: 'Bank added successfully.',
@@ -50,7 +51,12 @@ router.post(
             id: createdBank._id
           }
         });
-    });
+      })
+      .catch(error => {
+        res.status(500).json({
+          message: 'Creating a bank failed!'
+        })
+      });
   }
 );
 
@@ -76,6 +82,11 @@ router.get('',(req, res, next) =>{
         banks: fetchedBanks,
         maxBanks: count
       });
+    })
+    .catch(error => {
+      res.status(500).json({
+        message: 'Fetching Bank(s) failed!'
+      })
     });
 
 });
@@ -95,7 +106,12 @@ router.delete(
           message: 'Not authorized.'
         });
       }
-  });
+    })
+    .catch(error => {
+      res.status(500).json({
+        message: 'Deleting Bank failed!'
+      })
+    });
 
 });
 
@@ -127,17 +143,28 @@ router.put(
             message: 'Not authorized.'
           });
         }
+    })
+    .catch( error => {
+      res.status(500).json({
+        message: "Couldn't update bank!"
+      })
     });
 });
 
 router.get('/:id', (req, res, next) => {
-  Bank.findById(req.params.id).then(bank => {
+  Bank.findById(req.params.id)
+  .then(bank => {
     if(bank){
       res.status(200).json(bank);
     }else{
       res.status(404).json({message: 'Bank not found.'});
     }
   })
+  .catch(error => {
+    res.status(500).json({
+      message: 'Fetching Bank failed!'
+    });
+  });
 });
 
 module.exports = router;

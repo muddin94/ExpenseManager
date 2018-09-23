@@ -34,6 +34,8 @@ export class BankListComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.banksService.deleteBank(bankId).subscribe(() => {
       this.banksService.getBanks(this.banksPerPage, this.currentPage);
+    }, () => {
+      this.isLoading = false;
     });
   }
 
